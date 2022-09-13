@@ -1,9 +1,9 @@
 from flask import Blueprint
 from main import db
-from models.sellers import Seller
+from main import bcrypt
+from models.user import User
 from models.wine import Wine
 from models.vineyard import Vineyard
-
 
 db_commands = Blueprint("db", __name__)
 
@@ -34,7 +34,13 @@ def seed_db():
         price = 47.50
     )
     db.session.add(wine1)
-   
+
+    user1 = User(
+        username = "Jordan",
+        email = "jordan.attfield@outlook.com",
+        password = bcrypt.generate_password_hash("123456").decode("utf-8")
+    )
+    db.session.add(user1)
 
     db.session.commit()
     print("Tables seeded")
