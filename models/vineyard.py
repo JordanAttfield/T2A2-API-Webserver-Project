@@ -6,3 +6,7 @@ class Vineyard(db.Model):
     vineyard_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     region = db.Column(db.String())
+    wine = db.relationship(
+        "Wine",
+        backref= "vineyard"
+    )

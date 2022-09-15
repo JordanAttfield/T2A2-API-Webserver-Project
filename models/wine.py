@@ -9,3 +9,4 @@ class Wine(db.Model):
     vintage = db.Column(db.Integer)
     description = db.Column(db.String())
     price = db.Column(db.Integer)
+    vineyard_id = db.Column(db.Integer, db.ForeignKey("vineyard.vineyard_id"))
