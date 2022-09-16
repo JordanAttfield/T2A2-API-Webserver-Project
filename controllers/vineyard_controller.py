@@ -6,6 +6,12 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 vineyard = Blueprint('Vineyard', __name__, url_prefix="/vineyards")
 
+@vineyard.route('/', methods=["GET"])
+def get_vineyards():
+    vineyard_list = Vineyard.query.all()
+    result = vineyards_schema.dump(vineyard_list)
+    return jsonify(result)
+
 # Route to get a single vineyard back based on the vineyard id
 @vineyard.route("/<int:id>", methods=["GET"])
 def get_vineyard(id):

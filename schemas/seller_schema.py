@@ -3,8 +3,10 @@ from marshmallow.validate import Length
 
 class SellerSchema(ma.Schema):
     class Meta:
-        fields = ("seller_id", "shop_name", "email", "username", "password")
+        ordered=True
+        fields = ("seller_id", "email", "username", "password", "store")
 
         password = ma.String(validate=Length(min=6))
 
 seller_schema = SellerSchema()
+sellers_schema = SellerSchema(many=True)

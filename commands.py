@@ -6,6 +6,7 @@ from models.user import User
 from models.wine import Wine
 from models.vineyard import Vineyard
 from models.seller import Seller
+from models.store import Store
 
 db_commands = Blueprint("db", __name__)
 
@@ -38,6 +39,7 @@ def seed_db():
         region = "Clare Valley"
     )
     db.session.add(vineyard3)
+    db.session.commit()
 
     wine1 = Wine(
         name = "Shaw & Smith Shiraz",
@@ -115,7 +117,6 @@ def seed_db():
     db.session.add(user2)
 
     seller1 = Seller(
-        shop_name = "Brisbane Local Wine",
         email = "admin@blw.com.au",
         username = "george28",
         password = bcrypt.generate_password_hash("123456").decode("utf-8")
@@ -123,12 +124,27 @@ def seed_db():
     db.session.add(seller1)
 
     seller2 = Seller(
-        shop_name = "Little Ripples Wine",
         email = "admin@littleripples.com.au",
         username = "AnnaJ",
-        password = bcrypt.generate_password_hash("123456").decode("utf-8")
+        password = bcrypt.generate_password_hash("123456").decode("utf-8"),
+        
     )
-    db.session.add(seller2)
 
+    db.session.add(seller2)
+    db.session.commit()
+
+    store1 = Store(
+        name = "Little Ripples Online Wine Sales",
+        location = "Brisbane",
+        seller = seller2
+    )
+    db.session.add(store1)
+    store2 = Store(
+        name = "Corks & Cakes",
+        location = "Sydney",
+        seller = seller1
+    )
+
+    db.session.add(store2)
     db.session.commit()
     print("Tables seeded")
