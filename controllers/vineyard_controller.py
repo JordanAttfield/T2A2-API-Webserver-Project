@@ -17,7 +17,7 @@ def get_vineyards():
 def get_vineyard(id):
     vineyard = Vineyard.query.get(id)
     if not vineyard:
-        return{"Sorry": "We can't find that vineyard in our database. Please try again."}
+        return{"Sorry": "We can't find that vineyard in our database. Please try again."}, 404
     result = vineyard_schema.dump(vineyard)
     return jsonify(result)
 
@@ -26,7 +26,7 @@ def get_vineyard(id):
 @jwt_required()
 def add_vineyard():
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     vineyard_fields = vineyard_schema.load(request.json)
     vineyard = Vineyard(
         name = vineyard_fields["name"],
@@ -41,10 +41,10 @@ def add_vineyard():
 @jwt_required()
 def delete_vineyard(id):
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     vineyard = Vineyard.query.get(id)
     if not vineyard:
-        return{"Error": "We can't find that vineyard in our database. Please try again"}
+        return{"Error": "We can't find that vineyard in our database. Please try again"}, 404
     db.session.delete(vineyard)
     db.session.commit()
 

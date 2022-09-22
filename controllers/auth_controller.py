@@ -9,6 +9,7 @@ from models.user import User
 from schemas.user_schema import user_schema
 from models.seller import Seller
 from schemas.seller_schema import seller_schema
+from marshmallow.exceptions import ValidationError
 
 auth = Blueprint('auth', __name__, url_prefix="/auth")
 
@@ -22,7 +23,7 @@ def register_user():
     if user:
         return {"Error": "That username is already in our database."}
 
-    # Check if user already exists in the databse by searchibng for email address
+    # Check if user already exists in the database by searchibng for email address
     user = User.query.filter_by(email=user_fields["email"]).first()
     if user:
         return {"Error": "That email address is already in our database."}
@@ -72,3 +73,7 @@ def login_seller():
     token = create_access_token(identity="seller", expires_delta=timedelta(days=1))
 
     return {"Username": seller.username, "token": token}
+
+@auth.errorhandler(ValidationError)
+def register_validation_error(error):
+    return error.messages, 400

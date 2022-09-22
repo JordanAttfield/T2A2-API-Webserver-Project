@@ -18,6 +18,14 @@ wine = Blueprint('wine', __name__, url_prefix="/wine")
 @wine.route("/", methods=["GET"])
 @jwt_required()
 def get_wines():
+    if request.query_string:
+        if request.args.get('grape_variety'):
+            filtered_wine_list = Wine.query.filter_by(grape_variety=request.args.get('grape_variety'))
+            result = wines_schema.dump(filtered_wine_list)
+            return jsonify(result)
+        else:
+            return {"Message": "We don't have any wine in our database that meets that criteria."}, 404
+
     wine_list = Wine.query.all()
     result = wines_schema.dump(wine_list)
     return jsonify(result)
@@ -34,7 +42,7 @@ def get_wine(id):
 @jwt_required()
 def add_wine():
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     wine_fields = wine_schema.load(request.json)
     wine = Wine(
         name = wine_fields["name"],
@@ -47,17 +55,17 @@ def add_wine():
 
     db.session.add(wine)
     db.session.commit()
-    return jsonify(wine_schema.dump(wine))
+    return jsonify(wine_schema.dump(wine)), 201
 
 # Route to update a wine listing in database based on wine_id. Need to have jwt bearer token and identity="seller" to complete this action.
 @wine.route("/<int:id>", methods=["PUT"])
 @jwt_required()
 def update_wine(id):
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     wine = Wine.query.get(id)
     if not wine:
-        return {"Error": "We couldn't find that wine in our database. Please try again"}
+        return {"Error": "We couldn't find that wine in our database. Please try again"}, 404
     
     wine_fields = wine_schema.load(request.json)
 
@@ -69,14 +77,14 @@ def update_wine(id):
 
     db.session.commit()
 
-    return jsonify(wine_schema.dump(wine))
+    return jsonify(wine_schema.dump(wine)), 201
 
 # Route for sellers to see all purchase data. JWT bearer token and seller id required.
 @wine.route("/purchases", methods=["GET"])
 @jwt_required()
 def all_purchases():
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     purchases_list = StorePurchases.query.all()
     result = store_purchases_schema_plural.dump(purchases_list)
     return jsonify(result)
@@ -127,7 +135,7 @@ def all_purchases():
 @jwt_required()
 def all_wine_sold():
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     wine_sold_list = WineSold.query.all()
     result = wines_sold_schema.dump(wine_sold_list)
     return jsonify(result)
@@ -137,10 +145,10 @@ def all_wine_sold():
 @jwt_required()
 def new_wine_sale(wine_id):
     if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
     wine = Wine.query.get(wine_id)
     if not wine:
-        return {"Error": "We can't find that wine in our database. Please try again"}
+        return {"Error": "We can't find that wine in our database. Please try again"}, 404
     wine_sold_fields = wine_sold_schema.load(request.json)
     winesold = WineSold(
         store_id = wine_sold_fields["store_id"],
