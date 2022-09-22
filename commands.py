@@ -7,6 +7,9 @@ from models.wine import Wine
 from models.vineyard import Vineyard
 from models.seller import Seller
 from models.store import Store
+from models.store_purchases import StorePurchases
+from models.wine_sold import WineSold
+from datetime import date
 
 db_commands = Blueprint("db", __name__)
 
@@ -147,4 +150,24 @@ def seed_db():
 
     db.session.add(store2)
     db.session.commit()
+
+    storepurchase1 = StorePurchases(
+        purchase_date = date.today(),
+        user = user1,
+        store  = store2,
+        wine = wine1
+
+    )
+    db.session.add(storepurchase1)
+    db.session.commit()
+
+    winesold1 = WineSold(
+        store = store2,
+        wine = wine1,
+
+    )
+    db.session.add(winesold1)
+    db.session.commit()
+
+
     print("Tables seeded")

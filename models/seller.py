@@ -2,7 +2,7 @@ from main import db
 from models.store import Store
 
 class Seller(db.Model):
-    __tablename__ = "seller"
+    __tablename__ = "sellers"
 
     seller_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(), nullable=False)
