@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 vineyard = Blueprint('Vineyard', __name__, url_prefix="/vineyards")
 
+# Route to get all vineyards back from the database
 @vineyard.route('/', methods=["GET"])
 def get_vineyards():
     vineyard_list = Vineyard.query.all()
@@ -17,7 +18,7 @@ def get_vineyards():
 def get_vineyard(id):
     vineyard = Vineyard.query.get(id)
     if not vineyard:
-        return{"Sorry": "We can't find that vineyard in our database. Please try again."}, 404
+        return {"Sorry": "We can't find that vineyard in our database. Please try again."}, 404
     result = vineyard_schema.dump(vineyard)
     return jsonify(result)
 
@@ -44,7 +45,7 @@ def delete_vineyard(id):
         return {"Error": "Sorry, you do not have permission to do this"}, 401
     vineyard = Vineyard.query.get(id)
     if not vineyard:
-        return{"Error": "We can't find that vineyard in our database. Please try again"}, 404
+        return {"Error": "We can't find that vineyard in our database. Please try again"}, 404
     db.session.delete(vineyard)
     db.session.commit()
 

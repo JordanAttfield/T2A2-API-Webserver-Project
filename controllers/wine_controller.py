@@ -11,10 +11,11 @@ from schemas.store_purchases_schema import store_purchases_schema, store_purchas
 from schemas.wine_sold_schema import wine_sold_schema, wines_sold_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import date
+from marshmallow.exceptions import ValidationError
 
 wine = Blueprint('wine', __name__, url_prefix="/wine")
 
-# Route to get all the wines back from the database
+#CHECKED Route to get all the wines back from the database
 @wine.route("/", methods=["GET"])
 @jwt_required()
 def get_wines():
@@ -30,14 +31,17 @@ def get_wines():
     result = wines_schema.dump(wine_list)
     return jsonify(result)
 
-# Route to get a single wine back based on wine id
+#CHEKCED Route to get a single wine back based on wine id
 @wine.route("/<int:id>", methods=["GET"])
+@jwt_required()
 def get_wine(id):
     wine = Wine.query.get(id)
+    if not wine:
+        return {"Sorry": "We can't find that wine in our database. Please try again."}, 404
     result = wine_schema.dump(wine)
     return jsonify(result)
 
-# Route to add a new wine to the database. Need to have jwt bearer token and identity="seller" to complete this action.
+#CHECKED Route to add a new wine to the database. Need to have jwt bearer token and identity="seller" to complete this action.
 @wine.route("/", methods=["POST"])
 @jwt_required()
 def add_wine():
@@ -57,7 +61,7 @@ def add_wine():
     db.session.commit()
     return jsonify(wine_schema.dump(wine)), 201
 
-# Route to update a wine listing in database based on wine_id. Need to have jwt bearer token and identity="seller" to complete this action.
+#CHECKED Route to update a wine listing in database based on wine_id. Need to have jwt bearer token and identity="seller" to complete this action.
 @wine.route("/<int:id>", methods=["PUT"])
 @jwt_required()
 def update_wine(id):
@@ -78,6 +82,22 @@ def update_wine(id):
     db.session.commit()
 
     return jsonify(wine_schema.dump(wine)), 201
+
+#CHECKED Route for sellers to delete an individual wine. JWT Token and "seller" identity is required.
+@wine.route("/<int:id>", methods=["DELETE"])
+@jwt_required()
+def delete_wine(id):
+    if get_jwt_identity() != "seller":
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
+    
+    wine = Wine.query.get(id)
+    if not wine:
+        return {"Error": "We can't find that wine in our database. Please try again"}, 404
+
+    db.session.delete(wine)
+    db.session.commit()
+
+    return {"message": "Wine successfully deleted"}
 
 # Route for sellers to see all purchase data. JWT bearer token and seller id required.
 @wine.route("/purchases", methods=["GET"])
@@ -157,6 +177,10 @@ def new_wine_sale(wine_id):
     db.session.add(winesold)
     db.session.commit()
     return jsonify(wine_sold_schema.dump(winesold))
+
+@wine.errorhandler(ValidationError)
+def register_validation_error(error):
+    return error.messages, 400
 
      
 

@@ -5,7 +5,7 @@ class Store(db.Model):
     __tablename__ = "store"
 
     store_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), nullable=False)
+    name = db.Column(db.String(), nullable=False, unique=True)
     location = db.Column(db.String())
     seller_id = db.Column(db.Integer, db.ForeignKey("sellers.seller_id"), nullable=False)
     store_purchases = db.relationship(
