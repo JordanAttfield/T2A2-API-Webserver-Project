@@ -7,9 +7,7 @@ class StoreSchema(ma.Schema):
         ordered = True
         fields = ["store_id", "name", "location", "seller"]
     seller = fields.Nested(SellerSchema)
-    
 
-seller_schema = SellerSchema()
-sellers_schema = SellerSchema(many=True)
-
+store_schema = StoreSchema()
+stores_schema = StoreSchema(many=True)
 

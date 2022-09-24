@@ -17,5 +17,6 @@ class WineSchema(ma.Schema):
     vineyard = fields.Nested(VineyardSchema, only=("name", "region"))
 
 
+
 wine_schema = WineSchema()
 wines_schema = WineSchema(many=True)

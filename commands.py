@@ -142,6 +142,7 @@ def seed_db():
         seller = seller2
     )
     db.session.add(store1)
+
     store2 = Store(
         name = "Corks & Cakes",
         location = "Sydney",
@@ -169,5 +170,13 @@ def seed_db():
     db.session.add(winesold1)
     db.session.commit()
 
+    store3 = Store(
+        name = "Naked Wines",
+        location = "Melbourne",
+        seller = seller2
+    
+    )
+    db.session.add(store3)
+    db.session.commit()
 
     print("Tables seeded")

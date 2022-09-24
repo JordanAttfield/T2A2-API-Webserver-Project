@@ -99,15 +99,6 @@ def delete_wine(id):
 
     return {"message": "Wine successfully deleted"}
 
-# Route for sellers to see all purchase data. JWT bearer token and seller id required.
-@wine.route("/purchases", methods=["GET"])
-@jwt_required()
-def all_purchases():
-    if get_jwt_identity() != "seller":
-        return {"Error": "Sorry, you do not have permission to do this"}, 401
-    purchases_list = StorePurchases.query.all()
-    result = store_purchases_schema_plural.dump(purchases_list)
-    return jsonify(result)
 
 # # Route for sellers to see purchase data for specific wine based on id. JWT & bearer token required.
 # @wine.route('/int:<wine_id>/purchases', methods=["GET"])

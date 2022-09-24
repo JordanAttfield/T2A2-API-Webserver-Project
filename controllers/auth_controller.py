@@ -41,7 +41,7 @@ def register_user():
 
     return {"username": user.username, "token": token}
 
-# Route to login users
+# Route to login users. 
 @auth.route("/login", methods=["POST"])
 def login_user():
     user_fields = user_schema.load(request.json)
@@ -57,7 +57,7 @@ def login_user():
 
     return {"Username": user.username, "token": token}
 
-# Route for sellers to login
+# Route for sellers to login. Bearer token is given and identity is set to "seller"
 @auth.route("/seller/login", methods=["POST"])
 def login_seller():
     seller_fields = seller_schema.load(request.json)

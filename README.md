@@ -113,32 +113,71 @@ Authentication methods where applicable
 **Authentication Methods:** User must have a JWT token and "seller" identity.
 
 ### Endpoint 9 ###
-**URL Path:**
+**URL Path:** /vineyards
 
-**Description:**
+**Description:** Route to get all vineyards from the database
 
-**HTTP Request Verb:** 
+**HTTP Request Verb:** GET
 
-**Required Data:** 
+**Required Data:** None.
 
-**Expected Response Data:** 
+**Expected Response Data:** All vineyards stored in the database should be returned. Attributes for each vineyard include vineyard id, name, region, and a list of all wines the vineyard is selling.
 
-**Authentication Methods:** 
+**Authentication Methods:** User must have a JWT token to access.
 
 ### Endpoint 10 ###
-**URL Path:**
+**URL Path:** /vineyards/id
 
-**Description:**
+**Description:** Route to get a single vineyard back from the database based on vineyard id.
 
-**HTTP Request Verb:** 
+**HTTP Request Verb:** GET
 
-**Required Data:** 
+**Required Data:** Vineyard id is required in the url.
 
-**Expected Response Data:** 
+**Expected Response Data:** If a correct vineyard id is entered, it will be returned from the database. If an incorrect id is entered, a message will indicate the vineyard cannot be found.
 
-**Authentication Methods:** 
+**Authentication Methods:** JWT token is required.
 
 ### Endpoint 11 ###
+**URL Path:** /vineyards
+
+**Description:** Route allows sellers to post a new vineyard to the database.
+
+**HTTP Request Verb:** POST
+
+**Required Data:** Vineyard name and region are both (required=True). An error will indicate this data needs to be entered if it is missing.
+
+**Expected Response Data:** If the vineyard data is successfully entered, the data of the new vineyard will be returned.
+
+**Authentication Methods:** User must have a JWT token and seller set as their identity.
+
+### Endpoint 12 ###
+**URL Path:** /vineyards/id
+
+**Description:** Allows sellers to update individual vineyard data.
+
+**HTTP Request Verb:** PUT
+
+**Required Data:** Vineyard id is required in the url path. If the incorrect id is entered, a message will indicate the vineyard can't be found in the database. Both name and region are required=True. If data in these fields is missing, a message will be returned asking for data to be entered.
+
+**Expected Response Data:** If entered correctly, the updated vineyard data will be returned.
+
+**Authentication Methods:** User must have a JWT token and seller set as their identity.
+
+### Endpoint 13 ###
+**URL Path:** /vineyards/id
+
+**Description:** Allows users to delete a vineyard from the database.
+
+**HTTP Request Verb:** DELETE
+
+**Required Data:** The correct vineyard id needs to be entered in the url. A message will indicate if the vineyard id is not found in the system.
+
+**Expected Response Data:** If entered correctly, a message will indicate the vineyard has been successfully deleted.
+
+**Authentication Methods:** User must have a JWT token and seller set as their identity.
+
+### Endpoint 14 ###
 **URL Path:**
 
 **Description:**
