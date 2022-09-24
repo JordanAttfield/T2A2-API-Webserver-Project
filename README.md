@@ -178,6 +178,19 @@ Authentication methods where applicable
 **Authentication Methods:** User must have a JWT token and seller set as their identity.
 
 ### Endpoint 14 ###
+**URL Path:** /store
+
+**Description:** Route for users to see all stores in database.
+
+**HTTP Request Verb:** GET
+
+**Required Data:** None.
+
+**Expected Response Data:** All stores listed in database will be returned.
+
+**Authentication Methods:** User must have a JWT token.
+
+### Endpoint 15 ###
 **URL Path:**
 
 **Description:**
