@@ -21,4 +21,5 @@ class Wine(db.Model):
         backref="wine",
         cascade="all, delete"
     )
+    
   

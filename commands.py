@@ -163,6 +163,7 @@ def seed_db():
     db.session.commit()
 
     winesold1 = WineSold(
+        sale_date = date.today(),
         store = store2,
         wine = wine1,
 

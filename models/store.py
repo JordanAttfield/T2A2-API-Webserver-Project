@@ -18,3 +18,4 @@ class Store(db.Model):
         backref="store",
         cascade="all, delete"
     )
+

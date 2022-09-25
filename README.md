@@ -191,7 +191,124 @@ Authentication methods where applicable
 **Authentication Methods:** User must have a JWT token.
 
 ### Endpoint 15 ###
-**URL Path:**
+**URL Path:** store/id
+
+**Description:** Route for users to return a single store from the database
+
+**HTTP Request Verb:** GET
+
+**Required Data:** Store id is required in the url.
+
+**Expected Response Data:** If successful, a single store will be returned with all data fields. If no store id matches the url entered, a message will be returned indicating this.
+
+**Authentication Methods:** JWT token is required.
+
+### Endpoint 16 ###
+**URL Path:** /store
+
+**Description:** Route for sellers to create a new store
+
+**HTTP Request Verb:** POST
+
+**Required Data:** name, location and seller id are required fields.
+
+**Expected Response Data:** If entered correctly, the newly added store will be returned with all data fields. All fields are required=True so a message will indicate if data is missing.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 17 ###
+**URL Path:** /store/id
+
+**Description:** Route for sellers to update store data
+
+**HTTP Request Verb:** PUT
+
+**Required Data:** Correct store id is required for the url, name, location and seller id are required for the body,
+
+**Expected Response Data:** If entered correctly, the updated store data will be returned. If store id doesn't match the database, a message will be returned indicating this.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 18 ###
+**URL Path:** store/id
+
+**Description:** Route for sellers to delete a store from the database
+
+**HTTP Request Verb:** DELETE
+
+**Required Data:** Store id is required for the url
+
+**Expected Response Data:** A message will be returned indicating the store has been successfully deleted. If store id entered doesn't match to the database, a message will alert to this.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 19 ###
+**URL Path:** /store/wine_sold
+
+**Description:** Route for sellers to see all sales data
+
+**HTTP Request Verb:** GET
+
+**Required Data:** None.
+
+**Expected Response Data:** All sales data for wine sold from all stores will be returned.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 20 ###
+**URL Path:** /store/wine_sold/id
+
+**Description:** Route for seller to view data on a single wine sale.
+
+**HTTP Request Verb:** GET
+
+**Required Data:** wine_sold_id is required for the url.
+
+**Expected Response Data:** Data on a single wine sale will be returned. If the wine sale id doesn't exist in the databse, a message will be returned indicating this.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 21 ###
+**URL Path:** store/wine_id/wine_sale/store_id
+
+**Description:** Route for sellers to record a new wine sale to their store
+
+**HTTP Request Verb:** POST
+
+**Required Data:** Correct wine id and store id is required for the url and data fields in the body.
+
+**Expected Response Data:** If succesfully entered, the new sale transaction will be returned.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 22 ###
+**URL Path:** /store/wine_sold/wine_sold_id
+
+**Description:** Route for seller to update wine sale data
+
+**HTTP Request Verb:** PUT
+
+**Required Data:** Correct wine sold id is required for the url. Sale date, store id and wine id are required fields to succesfully update.
+
+**Expected Response Data:** If successful, the updated data will be returned.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 23 ###
+**URL Path:** /store/wine_sold/wine_sold_id
+
+**Description:** Route for seller to delete wine sale data
+
+**HTTP Request Verb:** DELETE
+
+**Required Data:** wine sold id is required for the url.
+
+**Expected Response Data:** A message will indicate the data has been successfully deleted. If the id doesn't match the database, a message will indicate this.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 24 ###
+**URL Path:** 
 
 **Description:**
 
