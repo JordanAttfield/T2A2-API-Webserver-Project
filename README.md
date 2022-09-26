@@ -1,7 +1,7 @@
 Endpoint documentation should include
 HTTP request verb
-Required data where applicable 
-Expected response data 
+Required data where applicable
+Expected response data
 Authentication methods where applicable
 
 
@@ -308,14 +308,79 @@ Authentication methods where applicable
 **Authentication Methods:** JWT bearer token and seller identity required.
 
 ### Endpoint 24 ###
-**URL Path:** 
+**URL Path:** /store/purchases
+
+**Description:** Route to allow sellers to view all purchase data
+
+**HTTP Request Verb:** GET
+
+**Required Data:** None.
+
+**Expected Response Data:** All purchase transaction data stored in the database is returned.
+
+**Authentication Methods:**
+
+### Endpoint 24 ###
+**URL Path:** /store/purchase/id
+
+**Description:** Route to sellers to view indidivual purchase data based on store purchase id.
+
+**HTTP Request Verb:** GET
+
+**Required Data:** Store purchase id is required for the url.
+
+**Expected Response Data:** Individual purchase transaction data is returned from the database.
+
+**Authentication Methods:** JWT bearer token and seller identity is required.
+
+
+### Endpoint 25 ###
+**URL Path:** /store/purchase
+
+**Description:** Route for sellers to record a new store purchase transaction
+
+**HTTP Request Verb:** POST
+
+**Required Data:** Purchase date, user id, store id and wine id are all required data fields.
+
+**Expected Response Data:** The new purchase data will be returned.
+
+**Authentication Methods:** JWT bearer token and seller identity is required.
+
+### Endpoint 26 ###
+**URL Path:** store/purchase/store_purchase_id
+
+**Description:** Route for sellers to update store purchase transaction data.
+
+**HTTP Request Verb:** PUT
+
+**Required Data:** store purchase id is required for the url. Purchase date, user id, store id and wine id are required in the body.
+
+**Expected Response Data:** If entered correctly, the updated purchase transaction data will be returned.
+
+**Authentication Methods:** JWT bearer token and seller identity required.
+
+### Endpoint 27 ###
+**URL Path:** /store/purchase/store_purchase_id
+**Description:** Route for sellers to delete store purchase data.
+
+**HTTP Request Verb:** DELETE
+
+**Required Data:** Store purchase id is required for the url.
+
+**Expected Response Data:** The store purchase transaction will be deleted from the database. If the id doesn't match the database, a message will indicate this.
+
+**Authentication Methods:**JWT bearer token and seller identity required.
+
+### Endpoint 28 ###
+**URL Path:**
 
 **Description:**
 
-**HTTP Request Verb:** 
+**HTTP Request Verb:**
 
-**Required Data:** 
+**Required Data:**
 
-**Expected Response Data:** 
+**Expected Response Data:**
 
-**Authentication Methods:** 
+**Authentication Methods:**

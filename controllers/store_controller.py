@@ -4,8 +4,10 @@ from main import db
 from models.store import Store
 from models.user import User
 from models.wine import Wine
+from models.store_purchases import StorePurchases
 from models.wine_sold import WineSold
 from schemas.wine_sold_schema import wine_sold_schema, wines_sold_schema
+from schemas.store_purchases_schema import store_purchases_schema_plural, store_purchases_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from schemas.seller_store_schema import store_schema, stores_schema
 from datetime import date
@@ -158,9 +160,7 @@ def update_wine_sale(wine_sold_id):
 
     return jsonify(wine_sold_schema.dump(wine_sold)), 201
 
-
-
-# Route for seller to delete individual wine sale from database. JWT token and seller identity required
+#CHECKED Route for seller to delete individual wine sale from database. JWT token and seller identity required
 @store.route("/wine_sold/<int:wine_sold_id>", methods=["DELETE"])
 @jwt_required()
 def delete_wine_sold(wine_sold_id):
@@ -175,6 +175,93 @@ def delete_wine_sold(wine_sold_id):
     db.session.commit()
 
     return {"Message": "Wine sale data successfully deleted"}
+
+# STORE PURCHASE ROUTES
+
+#CHECKED Route for seller to record a new store purchase (CREATE)
+@store.route("/purchase", methods=["POST"])
+@jwt_required()
+def new_store_purchase():
+    if get_jwt_identity() != "seller":
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
+    store_purchase_fields = store_purchases_schema.load(request.json)
+
+    store_purchase = StorePurchases(
+        purchase_date = store_purchase_fields["purchase_date"],
+        user_id = store_purchase_fields["user_id"],
+        store_id = store_purchase_fields["store_id"],
+        wine_id = store_purchase_fields["wine_id"],
+    )
+
+    db.session.add(store_purchase)
+    db.session.commit()
+
+    return jsonify(store_purchases_schema.dump(store_purchase)), 201
+
+
+#CHECKED Route to view all purchases. JWT token and seller identity required (READ)
+@store.route("/purchases", methods=["GET"])
+@jwt_required()
+def get_purchases():
+    if get_jwt_identity() != "seller":
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
+
+    store_purchases_list = StorePurchases.query.all()
+    result = store_purchases_schema_plural.dump(store_purchases_list)
+    return jsonify(result)
+
+
+#CHECKED Route for sellers to get individual store purchase transaction data (READ)
+@store.route("/purchase/<int:purchase_id>")
+@jwt_required()
+def get_purchase(purchase_id):
+    if get_jwt_identity() != "seller":
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
+
+    store_purchase = StorePurchases.query.get(purchase_id)
+    if not store_purchase:
+        return {"Error": "We couldn't find that transaction in our database. Please try again."}
+    
+    result = store_purchases_schema.dump(store_purchase)
+    return jsonify(result)
+
+# CHECKED Route for seller to update store purchase data. JWT token and seller identity required (UPDATE)
+@store.route("/purchase/<int:store_purchase_id>", methods=["PUT"])
+@jwt_required()
+def update_store_purchase(store_purchase_id):
+    if get_jwt_identity() != "seller":
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
+    store_purchase = StorePurchases.query.get(store_purchase_id)
+    if not store_purchase:
+        return {"Error": "We couldn't find that purchase data in our database. Please try again"}, 404
+
+    store_purchase_fields = store_purchases_schema.load(request.json)
+
+    store_purchase.purchase_date = store_purchase_fields["purchase_date"]
+    store_purchase.user_id = store_purchase_fields["user_id"]
+    store_purchase.store_id = store_purchase_fields["store_id"]
+    store_purchase.wine_id = store_purchase_fields["wine_id"]
+
+    db.session.commit()
+
+    return jsonify(store_purchases_schema.dump(store_purchase)), 201
+
+# Route for seller to delete individual store purchase data from database. JWT token and seller identity required
+@store.route("/purchase/<int:store_purchase_id>", methods=["DELETE"])
+@jwt_required()
+def delete_store_purchase(store_purchase_id):
+    if get_jwt_identity() != "seller":
+        return {"Error": "Sorry, you do not have permission to do this"}, 401
+    
+    store_purchase = StorePurchases.query.get(store_purchase_id)
+    if not store_purchase:
+        return {"Error": "We can't find that purchase data in our database. Please try again"}, 404
+    
+    db.session.delete(store_purchase)
+    db.session.commit()
+
+    return {"Message": "Store purchase data successfully deleted"}
+
 
 @store.errorhandler(ValidationError)
 def register_validation_error(error):
